@@ -2,12 +2,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-
-const unsigned char code[256]={ 0, 1, 2, 3, 156, 9, 134, 127, 151, 141,     142, 11, 12, 13, 14, 15, 16, 17, 18, 19, 157,     133, 8, 135, 24, 25, 146, 143, 28, 29, 30, 31,     128, 129, 130, 131, 132, 10, 23, 27, 136, 137, 138,     139, 140, 5, 6, 7, 144, 145, 22, 147, 148, 149,     150, 4, 152, 153, 154, 155, 20, 21, 158, 26, 32,     160, 161, 162, 163, 164, 165, 166, 167, 168, 91, 46,     60, 40, 43, 33, 38, 169, 170, 171, 172, 173, 174,     175, 176, 177, 93, 36, 42, 41, 59, 94, 45, 47,     178, 179, 180, 181, 182, 183, 184, 185, 124, 44, 37,     95, 62, 63, 186, 187, 188, 189, 190, 191, 192, 193,     194, 96, 58, 35, 64, 39, 61, 34, 195, 97, 98,     99, 100, 101, 102, 103, 104, 105, 196, 197, 198, 199,     200, 201, 202, 106, 107, 108, 109, 110, 111, 112, 113,     114, 203, 204, 205, 206, 207, 208, 209, 126, 115, 116,     117, 118, 119, 120, 121, 122, 210, 211, 212, 213, 214,     215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225,     226, 187, 228, 229, 230, 231, 123, 65, 66, 67, 68,     69, 70, 71, 72, 73, 232, 233, 234, 235, 236, 237,     125, 74, 75, 76, 77, 78, 79, 80, 81, 82, 238,     239, 240, 241, 242, 243, 92, 159, 83, 84, 85, 86,     87, 88, 89, 90, 244, 245, 246, 247, 248, 249, 48,     49, 50, 51, 52, 53, 54, 55, 56, 57, 250, 251,     252, 253, 254, 255 };
+#include "afp_extract_function.h"
 
 int readToMemory(char *file,uint8_t *arrP);
 unsigned long getSize(char *file);
-void EBC2ASCII (uint8_t co);
 
 int readToMemory(char *file,uint8_t *arrP){
 //copy file to memory
@@ -62,162 +60,6 @@ unsigned long getSize(char *file){
 	fclose(fd);
 
 	return v;
-}
-
-void EBC2ASCII (uint8_t co){
-	//print converted character (from EBCIDIC to ASCII)
-	//extern char code[256];
-	printf("%c",code[co]);
-}
-
-#define UNUSED(x) (void)(x)
-void extractTle (uint8_t *arrP,unsigned long pos,unsigned int end);
-void extractTle (uint8_t *arrP,unsigned long pos,unsigned int end){
-	UNUSED(end);
-	uint8_t *arr;
-	arr=arrP;
-	int i;
-
-	printf("TLE       ItemName=");
-
-	if (arr[pos+1] != 0x02) printf("Wrong detecion at position %lu",pos);
-	else {
-		for (i=0; i<arr[pos]-4 ; i++)
-			EBC2ASCII(arr[pos+4+i]);//name of attribut
-		printf("  ItemValue=");
-
-		for (i=0; i<arr[pos+arr[pos]]-4 ; i++)
-			EBC2ASCII(arr[pos+arr[pos]+4+i]);//value of attribute
-
-		printf("  PgName=  PgGroupName=\n");
-	}
-}
-
-void extractImm (uint8_t *arrP,unsigned long pos,unsigned int end);
-void extractImm (uint8_t *arrP,unsigned long pos,unsigned int end){
-	UNUSED(end);
-	uint8_t *arr;
-	arr=arrP;
-	int i;
-
-	printf("IMM       ");
-
-	for (i=0; i<8 ; i++)
-		EBC2ASCII(arr[pos+i]);//name of mediatype
-	printf("\n");
-}
-
-void extractBpg (uint8_t *arrP,unsigned long pos,unsigned int end);
-void extractBpg (uint8_t *arrP,unsigned long pos,unsigned int end){
-    //void extractBpg (uint8_t *arrP,int pos)
-	UNUSED(end);
-	UNUSED(pos);
-	UNUSED(arrP);
-
-	printf("BPG       ");
-	printf("MM=  MMpageNum=0  PGPrepeatgroup=0\n");
-}
-
-void extractEpg (uint8_t *arrP,unsigned long pos,unsigned int end);
-void extractEpg (uint8_t *arrP,unsigned long pos,unsigned int end){
-	UNUSED(end);
-	UNUSED(pos);
-	UNUSED(arrP);
-
-	printf("EPG       \n");
-}
-
-void extractBrs (uint8_t *arrP,unsigned long pos,unsigned int end);
-void extractBrs (uint8_t *arrP,unsigned long pos,unsigned int end){
-	UNUSED(end);
-	uint8_t *arr;
-	arr=arrP;
-	int i;
-
-	printf("BR        ");
-
-	for (i=0; i<8 ; i++)
-		EBC2ASCII(arr[pos+i]);//name of resource
-	printf("  ");
-	//X21 triplet - Resource object type
-	if (arr[pos+10] == 0x0a && arr[pos+11] == 0x21 && arr[pos+13] == 0 && arr[pos+14] == 0 && arr[pos+15] == 0 && arr[pos+16] == 0 && arr[pos+17] == 0 && arr[pos+18] == 0) {
-		printf("Type=");
-		switch (arr[pos+12]){
-			case 0xfe: printf("FormDef Object");break;
-			case 0x40: printf("Font Character Set Object");break;
-		}
-	}
-
-	printf("\n");
-}
-
-void extractBmm (uint8_t *arrP,unsigned long pos,unsigned int end);
-void extractBmm (uint8_t *arrP,unsigned long pos,unsigned int end){
-	UNUSED(end);
-	uint8_t *arr;
-	arr=arrP;
-	int i;
-
-	printf("BMM       ");
-
-	for (i=0; i<8 ; i++)
-		EBC2ASCII(arr[pos+i]);//name of resource
-	printf("\n");
-}
-
-void extractMmc (uint8_t *arrP,unsigned long pos,unsigned int end);
-void extractMmc (uint8_t *arrP,unsigned long pos,unsigned int end){
-	uint8_t *arr;
-	arr=arrP;
-	unsigned int i;
-
-	printf("MMC       Jog=False  ");
-	for (i=0;i<end-8;i++){
-		if (arr[pos+i]==0xf4 && arr[pos+i+1]==0x01) printf("Duplex=No  ");
-		if (arr[pos+i]==0xf4 && arr[pos+i+1]==0x02) printf("Duplex=Yes ");//Normal duplex. The media is turned around the Ym axis. 
-		if (arr[pos+i]==0xf4 && arr[pos+i+1]==0x03) printf("Duplex=Yes ");//Tumble duplex. The media is turned around the Xm axis.
-	}
-	for (i=0;i<end-8;i++){
-		if (arr[pos+i]==0xfc && arr[pos+i+1]==0x01) printf("nUP=1  ");//pos+i+1 number of partitioning
-	}
-
-	for (i=0;i<end-8;i++){
-		if (arr[pos+i]==0xe0 && arr[pos+i+1]==0x01 && arr[pos+i+2]==0xe1) printf("TrayNum=%i  ",arr[pos+i+3]);
-	}
-
-	printf("Quality=255\n");
-}
-
-void extractNop (uint8_t *arrP,unsigned long pos,unsigned int end);
-void extractNop (uint8_t *arrP,unsigned long pos,unsigned int end){
-	UNUSED(end);
-	uint8_t *arr;
-	arr=arrP;
-	int i;
-
-	printf("NOP       ");
-
-	for (i=0; i<arr[pos-7]-8 ; i++)
-		EBC2ASCII(arr[pos+0+i]);//value of NOP
-	printf("\n");
-}
-
-void extractEdt (uint8_t *arrP,unsigned long pos, unsigned int end);
-void extractEdt (uint8_t *arrP,unsigned long pos, unsigned int end){
-	UNUSED(end);
-	UNUSED(pos);
-	UNUSED(arrP);
-
-	return;
-}
-
-void extractBrg (uint8_t *arrP,unsigned long pos, unsigned int end);
-void extractBrg (uint8_t *arrP,unsigned long pos, unsigned int end){
-	UNUSED(end);
-	UNUSED(pos);
-	UNUSED(arrP);
-
-	return;
 }
 
 #define SPOJ(d3,tt,cc) (d3<<16)+(tt<<8)+cc // d3-class code, tt-field type, cc-category code pg. 49
