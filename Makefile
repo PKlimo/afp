@@ -5,11 +5,12 @@ CFLAGS=-std=c99 -Wall -Werror -pedantic -pedantic-errors -Wextra -Wshadow -Wpoin
         -Wstrict-prototypes -Wmissing-prototypes
 CFLAGS += -O2
 SRC_NAME = afp_dump.c
+SOURCES = afp_extract_function.h ebcdic.h
 PRG_NAME =$(SRC_NAME:.c=.exe)
 
 all: $(PRG_NAME)
 
-$(PRG_NAME): $(SRC_NAME) afp_extract_function.h ebcdic.h
+$(PRG_NAME): $(SRC_NAME) $(SOURCES)
 	$(CC) $(CFLAGS) $(SRC_NAME) -o $(PRG_NAME)
 
 run: $(PRG_NAME)
