@@ -32,5 +32,8 @@
 *.dSYM/
 *.su
 
+# Vim swap files
+*.swp
+
 # Testing files
 *.afp
