@@ -74,7 +74,7 @@ typedef struct {
 } SFTypeT ;
 
 SFTypeT SFType[]={
-		{0,"XXX","Unknown type",0,NULL},
+		{0,"XXX","Unknown type",0,extractUnknown},
 		{0xd3a9a8,"EDT","End Document",204,extractEdt},
 		{0xd3a090,"TLE","Tag Logical Element",370,extractTle},
 		{0xd3abcc,"IMM","Invoke Media Map",226,extractImm},
@@ -87,23 +87,25 @@ SFTypeT SFType[]={
 		{0xd3eeee,"NOP","No Operation",325,extractNop}
 };
 
-/*TODO do sekcie data dat vystup extracnej funkcie*/
-/*TODO rozdelit zdrojak tle.c do viacerych suborov - afp specificke funkcie, pomocne funkcie na EBCIDIC, riadiace funkcie*/
 /*TODO doplnit tabulku SFType*/
 /*TODO zmenit funkciu ReadToMemory, aby nenacitala cely subor, ale iba jeden ramec (Structured Field)*/
 
-void printSfType(uint32_t sf);
-void printSfType(uint32_t sf)
-//print the name of Structured Field Type
-{
-	#define SFTAG "SFType"
-	size_t found=0;
+int getSFTypeid(uint32_t sf);
+int getSFTypeid(uint32_t sf){
 	for (size_t i=0;i<sizeof(SFType)/sizeof(SFTypeT);i++)
 			if (SFType[i].id == sf)
-					found=i;
-	printf("<" SFTAG " pg=\"%i\" des=\"%s\">%s</" SFTAG ">",SFType[found].pg,SFType[found].des,SFType[found].tag);
+					return i;
+    return 0;
 }
 
+void printSfType(uint32_t sf);
+void printSfType(uint32_t sf){
+    //print the name of Structured Field Type
+	#define SFTAG "SFType"
+	int found= getSFTypeid(sf);
+    printf("<" SFTAG " pg=\"%i\" des=\"%s\">%s</" SFTAG ">",SFType[found].pg,SFType[found].des,SFType[found].tag);
+    #undef SFTAG
+}
 
 void process (uint8_t *arrP, unsigned long pos, unsigned int len);
 void process (uint8_t *arrP, unsigned long pos, unsigned int len)
@@ -123,8 +125,11 @@ void process (uint8_t *arrP, unsigned long pos, unsigned int len)
 	printf("<FlagByte>%.2x</FlagByte>",arr[pos+6]);
 	printf("<Reserved>%.2x %.2x</Reserved>",arr[pos+7],arr[pos+8]);
 	printf("</StructuredFieldIntroducer>");
-	printf("<Data>");
-	printf("</Data>");
+	printf("<Data><![CDATA[");
+    // print data in AFP Explorer form - by using extraction functions
+    int index = getSFTypeid(SPOJ(arr[pos+3],arr[pos+4],arr[pos+5]));
+    SFType[index].extract(arr, pos+9, len);
+	printf("]]></Data>");
 	printf("<Padding>");
 	printf("</Padding>");
 	//hex

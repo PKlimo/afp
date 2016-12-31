@@ -9,7 +9,7 @@ PRG_NAME =$(SRC_NAME:.c=.exe)
 
 all: $(PRG_NAME)
 
-$(PRG_NAME): $(SRC_NAME)
+$(PRG_NAME): $(SRC_NAME) afp_extract_function.h ebcdic.h
 	$(CC) $(CFLAGS) $(SRC_NAME) -o $(PRG_NAME)
 
 run: $(PRG_NAME)

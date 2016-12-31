@@ -1,6 +1,7 @@
 #include "ebcdic.h"
 
 #define UNUSED(x) (void)(x)
+void extractUnknown (uint8_t *arrP,unsigned long pos,unsigned int end);
 void extractTle (uint8_t *arrP,unsigned long pos,unsigned int end);
 void extractImm (uint8_t *arrP,unsigned long pos,unsigned int end);
 void extractBpg (uint8_t *arrP,unsigned long pos,unsigned int end);
@@ -147,7 +148,14 @@ void extractBrg (uint8_t *arrP,unsigned long pos, unsigned int end){
 	UNUSED(end);
 	UNUSED(pos);
 	UNUSED(arrP);
-
+    // printf("brg");
 	return;
 }
 
+void extractUnknown (uint8_t *arrP,unsigned long pos,unsigned int end){
+	UNUSED(end);
+	UNUSED(pos);
+	UNUSED(arrP);
+    // printf("unknown");
+	return;
+}
