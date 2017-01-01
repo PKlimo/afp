@@ -87,9 +87,6 @@ SFTypeT SFType[]={
 		{0xd3eeee,"NOP","No Operation",325,extractNop}
 };
 
-/*TODO doplnit tabulku SFType*/
-/*TODO zmenit funkciu ReadToMemory, aby nenacitala cely subor, ale iba jeden ramec (Structured Field)*/
-
 int getSFTypeid(uint32_t sf);
 int getSFTypeid(uint32_t sf){
 	for (size_t i=0;i<sizeof(SFType)/sizeof(SFTypeT);i++)
