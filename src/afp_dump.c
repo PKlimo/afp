@@ -131,7 +131,7 @@ void process (uint8_t *arrP, unsigned long pos, unsigned int len)
 	printf("</Padding>");
 	//hex
 	printf("<Hex>");
-	for (i=0;i<len;i++) printf("%.2x",arr[pos+i]);
+	for (i=0;i<=len;i++) printf("%.2x",arr[pos+i]);
 	printf("</Hex>\n");
 	printf("</StructuredField>\n");
 //convert to hex:

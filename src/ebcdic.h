@@ -4,8 +4,8 @@ const unsigned char code[256]={ 0, 1, 2, 3, 156, 9, 134, 127, 151, 141,     142,
 void EBC2ASCII (uint8_t co);
 
 void EBC2ASCII (uint8_t co){
-	//print converted character (from EBCIDIC to ASCII)
-	//extern char code[256];
+    //print converted character (from EBCIDIC to ASCII)
+    //extern char code[256];
     if (isprint(code[co]))  // print only if character is printable
         printf("%c",code[co]);
 }
