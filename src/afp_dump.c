@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <openssl/md5.h>
 #include "afp_extract_function.h"
 
 int readToMemory(char *file,uint8_t *arrP);
@@ -157,6 +158,26 @@ void process (uint8_t *arrP, unsigned long pos, unsigned int len)
 uint8_t *arr;
 unsigned long size;
 
+int md5(char *filename, unsigned char *c);
+int md5(char *filename, unsigned char *c){
+    FILE *inFile = fopen (filename, "rb");
+    MD5_CTX mdContext;
+    int bytes;
+    unsigned char data[1024];
+
+    if (inFile == NULL) {
+        printf ("%s can't be opened.\n", filename);
+        return -1;
+    }
+
+    MD5_Init (&mdContext);
+    while ((bytes = fread (data, 1, 1024, inFile)) != 0)
+        MD5_Update (&mdContext, data, bytes);
+    MD5_Final (c,&mdContext);
+    fclose (inFile);
+    return 0;
+}
+
 int main(int argc, char **argv)
 {
 	unsigned long pos;//position in array
@@ -194,7 +215,12 @@ int main(int argc, char **argv)
 	printf("<Header>");
 	printf("<FileName>%s</FileName>",argv[1]);
 	printf("<FileSize>%lu</FileSize>",size);
-	printf("<FileCheckSum>%d</FileCheckSum>",0);//TODO md5 checksup of file
+    // md5 checksum
+    unsigned char *c = (unsigned char *) malloc (sizeof(char) * MD5_DIGEST_LENGTH);
+    md5(argv[1], c);
+	printf("<FileCheckSum>");
+    for(i = 0; i < MD5_DIGEST_LENGTH; i++) printf("%02x", c[i]);
+    printf("</FileCheckSum>");
 	printf("</Header>");
 	printf("<MoDca>");
 	while (pos < size-1) {
