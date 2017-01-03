@@ -218,7 +218,7 @@ int main(int argc, char **argv)
     // md5 checksum
     unsigned char *c = (unsigned char *) malloc (sizeof(char) * MD5_DIGEST_LENGTH);
     md5(argv[1], c);
-	printf("<FileCheckSum>");
+	printf("<FileCheckSum hash=\"md5\">");
     for(i = 0; i < MD5_DIGEST_LENGTH; i++) printf("%02x", c[i]);
     printf("</FileCheckSum>");
 	printf("</Header>");
