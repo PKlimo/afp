@@ -5,7 +5,7 @@ CFLAGS=-std=c99 -Wall -Werror -pedantic -pedantic-errors -Wextra -Wshadow -Wpoin
         -Wstrict-prototypes -Wmissing-prototypes
 CFLAGS += -O2
 LIBS = -lcrypto
-SRC_NAME = afp_dump.c
+SRC_NAME = afp2xml.c
 SOURCES = afp_extract_function.h ebcdic.h
 PRG_NAME = ../bin/$(SRC_NAME:.c=.exe)
 
