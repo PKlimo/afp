@@ -8,7 +8,7 @@ LIBS = -lcrypto
 SRC_NAME = afp2xml.c
 SOURCES = afp_extract_function.h ebcdic.h
 PRG_NAME = ../bin/$(SRC_NAME:.c=.exe)
-GIT_VERSION := $(shell git describe --abbrev=8 --always --tags)
+GIT_VERSION := $(shell git describe --abbrev=8 --dirty --always --tags)
 
 all: $(PRG_NAME)
 
