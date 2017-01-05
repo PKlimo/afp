@@ -3,11 +3,12 @@
 CC=gcc
 CFLAGS=-std=c99 -Wall -Werror -pedantic -pedantic-errors -Wextra -Wshadow -Wpointer-arith -Wcast-qual \
         -Wstrict-prototypes -Wmissing-prototypes
-CFLAGS += -O2
+CFLAGS += -O2 -DVERSION=\"$(GIT_VERSION)\"
 LIBS = -lcrypto
 SRC_NAME = afp2xml.c
 SOURCES = afp_extract_function.h ebcdic.h
 PRG_NAME = ../bin/$(SRC_NAME:.c=.exe)
+GIT_VERSION := $(shell git describe --abbrev=8 --always --tags)
 
 all: $(PRG_NAME)
 

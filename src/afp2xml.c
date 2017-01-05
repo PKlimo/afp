@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -193,6 +194,11 @@ int main(int argc, char **argv)
 		printf("Too much arguments");
 		return -2;
 	}
+
+    if (!strcmp(argv[1], "--version")){
+        printf("afp2xml version %s\n", VERSION);
+        return 0;
+    }
 
 	//get size of file (number of bytes)
 	size=getSize(argv[1]);
