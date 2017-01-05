@@ -3,7 +3,7 @@
 SRC_NAME = afp2xml.c
 PRG_NAME =$(SRC_NAME:.c=.exe)
 
-.PHONY: all run test_afpexplorer test_hex_afp
+.PHONY: all run test_afpexplorer test_hex_afp test_reports
 
 all:
 	$(MAKE) -C src
@@ -26,3 +26,10 @@ test_hex_afp: all
 	./bin/$(PRG_NAME) ./test1/test_01.afp | xsltproc xslt/get_hex.xslt - > tmp/test_xslt.hex
 	xxd -g 0 -p test1/test_01.afp | tr -d "\n" > tmp/test_01_afp.hex
 	diff -s tmp/test_xslt.hex tmp/test_01_afp.hex
+
+test_reports: test_afpexplorer
+	wine ./bin/reports.exe tmp/test_xslt.txt
+	wine ./bin/reports.exe tmp/test_01.txt
+	rm -f reports.log
+	rm -f ./bin/reports.log
+	diff -s tmp/test_01.rep tmp/test_xslt.rep
