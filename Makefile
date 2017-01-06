@@ -1,7 +1,7 @@
 # template for makefile
 
-SRC_NAME = afp2xml.c
-PRG_NAME =$(SRC_NAME:.c=.exe)
+SRC_NAME = afp2afpxml.c
+PRG_NAME =$(SRC_NAME:.c=)
 
 .PHONY: all run test_afpexplorer test_hex_afp test_reports
 
