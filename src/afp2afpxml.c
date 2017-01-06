@@ -196,7 +196,7 @@ int main(int argc, char **argv)
 	}
 
     if (!strcmp(argv[1], "--version")){
-        printf("afp2xml version %s\n", VERSION);
+        printf("afp2afpxml version %s\n", VERSION);
         return 0;
     }
 
