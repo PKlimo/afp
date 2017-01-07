@@ -4,5 +4,5 @@ pushd $(dirname $0) > /dev/null
 SCRIPTPATH=$(pwd)
 popd > /dev/null
 
-$SCRIPTPATH/afp2xml.exe $1 | xsltproc $SCRIPTPATH/../xslt/get_data.xslt -
+ xsltproc $SCRIPTPATH/../xslt/get_data.xslt -
 
