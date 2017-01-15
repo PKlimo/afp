@@ -4,5 +4,9 @@ pushd $(dirname $0) > /dev/null
 SCRIPTPATH=$(pwd)
 popd > /dev/null
 
- xsltproc $SCRIPTPATH/../xslt/get_data.xslt -
-
+if [ -z "$1" ];
+then
+    xsltproc $SCRIPTPATH/../xslt/get_data.xslt -
+else
+    xsltproc $SCRIPTPATH/../xslt/get_data.xslt $1
+fi

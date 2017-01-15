@@ -4,5 +4,5 @@ pushd $(dirname $0) > /dev/null
 SCRIPTPATH=$(pwd)
 popd > /dev/null
 
-# $SCRIPTPATH/afp2afpxml $1 | $SCRIPTPATH/afpxml2txt | $SCRIPTPATH/txt2repxml.py | xmllint --format -
-$SCRIPTPATH/afp2afpxml $1 | $SCRIPTPATH/afpxml2txt | $SCRIPTPATH/txt2repxml.py | $SCRIPTPATH/repxml2rep
+# $SCRIPTPATH/afp2afpxml $1 | $SCRIPTPATH/afpxml2txt | $SCRIPTPATH/txt2repxml | xmllint --format -
+$SCRIPTPATH/afp2afpxml $1 | $SCRIPTPATH/afpxml2txt | $SCRIPTPATH/txt2repxml | $SCRIPTPATH/repxml2rep

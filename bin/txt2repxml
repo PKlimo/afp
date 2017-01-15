@@ -74,7 +74,7 @@ def main():
             last_page = e
             last_tray = media2tray[last_page]
         if parseBPG(l):
-            print('<page form="{}" tray="{}"/>'.format(last_page, last_tray))
+            print('<Page form="{}" tray="{}"/>'.format(last_page, last_tray))
 
     print('</Letter>')
     print('</Envelope>')
