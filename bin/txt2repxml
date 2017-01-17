@@ -46,6 +46,10 @@ def parseMMC(line):
             return l[8:].strip()
     return None
 
+def add_media2seq(page):
+    if not page in media2seq:
+        media2seq.append(page)
+
 def main():
     last_enveope = None
     last_page = None
@@ -74,12 +78,15 @@ def main():
             last_page = e
             last_tray = media2tray[last_page]
         if parseBPG(l):
-            print('<Page form="{}" tray="{}"/>'.format(last_page, last_tray))
+            add_media2seq(last_page)
+            print('<Page form="{}" tray="{}" seq="{}"/>'.format(last_page, last_tray, 1 + media2seq.index(last_page)))
 
     print('</Letter>')
     print('</Envelope>')
     print('</File>')
 
-media2tray = dict()
+media2tray = dict()  # defined in formdef (tag MMC)
+media2seq = list()  # sequence of form/mediatype in order in which page/form is in afp
+
 if __name__ == "__main__":
     main()

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+pushd $(dirname $0) > /dev/null
+SCRIPTPATH=$(pwd)
+popd > /dev/null
+
+$SCRIPTPATH/tle.exe $1 | grep -v "NOP" > $SCRIPTPATH/../tmp/tmp.txt
+wine $SCRIPTPATH/reports.exe $SCRIPTPATH/../tmp/tmp.txt > /dev/null
+cat $SCRIPTPATH/../tmp/tmp.rep
+
+rm -f $SCRIPTPATH/../reports.log
+rm -f $SCRIPTPATH/reports.log
+rm -f $SCRIPTPATH/../tmp/tmp.rep
+rm -f $SCRIPTPATH/../tmp/tmp.txt

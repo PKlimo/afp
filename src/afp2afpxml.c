@@ -1,3 +1,6 @@
+#include <unistd.h>  // close
+#include <sys/stat.h>  // fstat
+#include <fcntl.h>  // open
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -42,26 +45,25 @@ int readToMemory(char *file,uint8_t *arrP){
 
 unsigned long getSize(char *file){
 //return size of file
-	int buf;
-	int v=0;
+    struct stat sb;
+    int fd;
 
-	FILE *fd;
-	fd=fopen(file,"rb");
+    fd = open (file, O_RDONLY);
+    if (fd == -1) {
+        perror ("open");
+        return 0;
+    }
 
-	if (fd==NULL) {
-		printf("Can not open file");
-		exit(-3);
-	}
+    if (fstat (fd, &sb) == -1) {
+        perror ("fstat");
+        return 0;
+    }
 
-	while (!feof(fd)) {
-		buf=0;
-		fread(&buf, 2, 1, fd);
-		v=v+2;
-	}
-
-	fclose(fd);
-
-	return v;
+    if (close (fd) == -1) {
+        perror ("close");
+        return 0;
+    }
+    return sb.st_size;
 }
 
 #define SPOJ(d3,tt,cc) (d3<<16)+(tt<<8)+cc // d3-class code, tt-field type, cc-category code pg. 49
@@ -202,6 +204,11 @@ int main(int argc, char **argv)
 
 	//get size of file (number of bytes)
 	size=getSize(argv[1]);
+    if (size == 0) {
+        perror ("getSize");
+        return -6;
+    }
+
 
 	//allocate a memory
 	arr=malloc(sizeof(uint8_t) * (size+1));
